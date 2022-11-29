@@ -4,7 +4,7 @@ const form = document.getElementById('contact-form');
 
 // Adds deleteCard() to the global scope so each card has access to it.
 window.deleteCard = (e) => {
-// Grabs the id from the button element attached to the contact card.
+  // Grabs the id from the button element attached to the contact card.
   let id = parseInt(e.id);
 
   // Delete the card
@@ -35,7 +35,7 @@ form.addEventListener('submit', (event) => {
 });
 
 const fetchCards = async () => {
-// Grab card data from IndexedDB
+  // Grab card data from IndexedDB
   const result = await getDb();
 
   let card = ` `;
@@ -46,12 +46,12 @@ const fetchCards = async () => {
     card += `
     <div class="card card-rounded col-md-3 m-2">
       <div class="card-header card-rounded">
-        <h1>${data.name}</h1>
+        <h1>${data.contact.name}</h1>
       </div>
       <div class="card-body">
-        <p>Home Phone: ${data.home_phone}</p>
-        <p>Cell Phone: ${data.cell_phone}</p>
-        <p>Email: ${data.email}</p>
+        <p>Home Phone: ${data.contact.home_phone}</p>
+        <p>Cell Phone: ${data.contact.cell_phone}</p>
+        <p>Email: ${data.contact.email}</p>
       </div>
       <div class="flex-row justify-flex-end p-1">
         <button class="btn btn-sm btn-danger" id="${data.id}" onclick="deleteCard(this)">Delete</button>

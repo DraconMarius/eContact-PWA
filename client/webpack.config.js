@@ -1,5 +1,6 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const WebpackPwaManifest = require('webpack-pwa-manifest');
 const { GenerateSW } = require('workbox-webpack-plugin');
 
@@ -16,8 +17,10 @@ module.exports = () => {
 
     // TODO: Add the correct output
     output: {
-      filename: "bundle.js",
+      filename: "[name].bundle.js",
       path: path.resolve(__dirname, 'dist'),
+      // chunkFilename: '[id].[chunkhash].js'
+      publicPath: './'
     },
     // adding hot server realod on client dev server
     devServer: {
@@ -28,22 +31,29 @@ module.exports = () => {
       //load html in dist folder
       new HtmlWebpackPlugin({
         template: './index.html',
-        title: 'Webpack Plugin',
+        title: 'eContact',
       }),
       //load css in assets
       new MiniCssExtractPlugin(),
-      new GenerateSW(),
+      new GenerateSW({
+        clientsClaim: true,
+        skipWaiting: true,
+        swDest: '../../service-worker.js'
+      }),
       new WebpackPwaManifest({
+        fingerprints: false,
+        inject: true,
         name: 'eContactPWA',
         short_nam: 'eContact',
         description: 'installable contact tracking app',
         background_color: '#ffffff',
         theme_color: '#7eb4e2',
         start_url: './',
+        publicPath: './',
 
         icons: [
           {
-            src: path.resolve('assets/images/logo.png'),
+            src: path.resolve('src/images/logo.png'),
             sizes: [96, 128, 192, 256, 384, 512],
             destination: path.join('assets', 'icons'),
           },
@@ -60,7 +70,7 @@ module.exports = () => {
         },
         {
           test: /\.(png|svg|jpg|jpeg|gif)$/i,
-          type: 'asset/resource',
+          type: 'assets/resource',
         },
         {
           test: /\.m?js$/,
